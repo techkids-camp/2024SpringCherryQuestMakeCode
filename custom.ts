@@ -4,58 +4,38 @@
 * 詳しくはこちらを参照してください：https://minecraft.makecode.com/blocks/custom
 */
 
-enum CarType {
-    //% block="スポーツカー"
-    Sports = 1,
-    //% block="ワゴン"
-    Wagon = 2,
-    //% block="トラック"
-    Truck = 3,
-    //% block="バイク"
-    Bike,
-    //% block="セダン"
-    Sedan,
-    //% block="コンパクトカー"
-    Compact
-}
 
-let carType: CarType | null = null
+let water: Boolean = false
 
 /**
  * Custom blocks
  */
-//% weight=100 color=#0fbc11 icon="\uf1b9" block="カーディーラー"
+//% weight=100 color=#ffc0cb icon="\uf043" block="水"
 namespace custom {
-    //% blockId=whenStartZero
-    //% block=くるまをつくるとき
-    export function whenStartZero(handler: () => void): void {
-        player.execute("scoreboard players add @s phase 1")
-    }
-
-    //% blockId=whenStartOne
-    //% block=くるまをつくるとき
-    export function whenStartOne(handler: () => void): void {
-        handler();
-        if(
-            carType == CarType.Sedan,
-        ){
-            player.execute("scoreboard players add @s phase 1")
+    //% blockId=draw
+    //% block=水をくむ
+    export function draw(): void {
+        if (agent.inspect(AgentInspection.Block, DOWN) == 9) {
+            water = 1
+            player.say("水を汲んだ")
+            player.say(water)
         } else {
-            player.execute("scoreboard players add @s phase 2")
+            player.say("水がない")
+            player.say(water)
         }
     }
-}
-
-
-/**
- * Custom blocks
- */
-//% weight=100 color=#2f4f4f icon="\uf0ad" block="くるまづくり"
-namespace custom2 {
-    //% blockId=selectCarType
-    //% block="車のタイプを$newCarTypeにする"
-    export function selectCarType(newCarType: CarType): void {
-        carType = newCarType
+    //% blockId=sprinkle
+    //% block=水をまく
+    export function sprinkle(): void {
+        if (agent.inspect(AgentInspection.Block, DOWN) == 22) {
+            if (water == 1) {
+                player.say("水を撒いた")
+            } else {
+                player.say("まだ水を汲んでない")
+            }
+        } else {
+            player.say("ここじゃぁない")
+        }
     }
 }
 
