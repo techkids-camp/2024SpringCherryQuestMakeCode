@@ -6,35 +6,44 @@
 
 
 let water: Boolean = false
+let isStop: Boolean = false
 
 /**
  * Custom blocks
  */
 //% weight=100 color=#ffc0cb icon="\uf043" block="水"
 namespace custom {
+    /**
+     * 水を汲むのに失敗した時:1
+     * 水をまくのに失敗した(水を汲んでいない):2
+     * 水をまくのに失敗した(まけない):3
+     * 成功:4
+     */
+
     //% blockId=draw
     //% block=水をくむ
     export function draw(): void {
-        if (agent.inspect(AgentInspection.Block, DOWN) == 9) {
-            water = 1
-            player.say("水を汲んだ")
-            player.say(water)
+        if(isStop == true) return;
+        if (agent.inspect(AgentInspection.Block, DOWN) == DIAMOND_BLOCK) {
+            water = true
         } else {
-            player.say("水がない")
-            player.say(water)
+            isStop = true
+            player.execute("scoreboard players add @a seq 1")
         }
     }
     //% blockId=sprinkle
     //% block=水をまく
     export function sprinkle(): void {
+        if (isStop == true) return;
+        isStop = true
         if (agent.inspect(AgentInspection.Block, DOWN) == 22) {
-            if (water == 1) {
-                player.say("水を撒いた")
+            if (water == true) {
+                player.execute("scoreboard players add @a seq 4")
             } else {
-                player.say("まだ水を汲んでない")
+                player.execute("scoreboard players add @a seq 2")
             }
         } else {
-            player.say("ここじゃぁない")
+            player.execute("scoreboard players add @a seq 3")
         }
     }
 }
