@@ -23,9 +23,10 @@ namespace custom {
     //% blockId=draw
     //% block=水をくむ
     export function draw(): void {
-        if(isStop == true) return;
+        if (isStop == true) return;
         if (agent.inspect(AgentInspection.Block, DOWN) == DIAMOND_BLOCK) {
             water = true
+            player.execute("tellraw @a {\"rawtext\": [{\"translate\":\"common.drawOk\"}]}")
         } else {
             isStop = true
             player.execute("scoreboard players add @a seq 1")
@@ -36,15 +37,60 @@ namespace custom {
     export function sprinkle(): void {
         if (isStop == true) return;
         isStop = true
-        if (agent.inspect(AgentInspection.Block, DOWN) == 22) {
+        if (agent.inspect(AgentInspection.Block, DOWN) == EMERALD_BLOCK) {
             if (water == true) {
-                player.execute("scoreboard players add @a seq 4")
+                player.execute("scoreboard players add @a seq 5")
             } else {
                 player.execute("scoreboard players add @a seq 2")
             }
         } else {
             player.execute("scoreboard players add @a seq 3")
         }
+    }
+}
+/**
+ * Custom blocks
+ */
+//% weight=100 color=#0078D7 icon="\uf007" block="プレイヤー"
+namespace custom2 {
+    //% blockId=level1
+    //% block=チャットコマンド$onChat|を入力した時
+    //% onChat.defl=run
+    export function level1(onChat: string = "run", handler: () => void): void {
+        agent.teleport(world(233, -54, 442), EAST)
+        const workFlow = function () {
+            handler();
+            if (isStop == false) {
+                player.execute("scoreboard players add @a seq 4")
+            }
+        }
+        player.onChat(onChat, workFlow)
+    }
+    //% blockId=level2
+    //% block=チャットコマンド$onChat|を入力した時
+    //% onChat.defl=run
+    export function level2(onChat: string = "run", handler: () => void): void {
+        agent.teleport(world(369, -54, 323), EAST)
+        const workFlow = function () {
+            handler();
+            if (isStop == false) {
+                player.execute("scoreboard players add @a seq 4")
+            }
+        }
+        player.onChat(onChat, workFlow)
+    }
+    //% blockId=level3
+    //% block=チャットコマンド$onChat|を入力した時
+    //% onChat.defl=run
+    export function level3(onChat: string = "run", handler: () => void): void {
+        agent.teleport(world(201,13,309), NORTH)
+        const workFlow = function () {
+            handler();
+            if (isStop == false) {
+                player.execute("scoreboard players add @a seq 4")
+            }
+        }
+        player.onChat(onChat, workFlow)
     }
 }
 
